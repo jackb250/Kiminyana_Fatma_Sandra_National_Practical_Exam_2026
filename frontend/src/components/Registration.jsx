@@ -1,38 +1,60 @@
-// src/components/Login.jsx
 import React, { useState } from 'react';
 
-export default function Login({ onLoginSuccess, onGoToRegister, hideSwitch }) {
+export default function Registration({ onRegisterSuccess, onGoToLogin }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        if (!username || !password) {
-            setError('Please fill in both fields.');
+
+        const cleanUsername = username.trim();
+
+        if (!cleanUsername || !password || !confirmPassword) {
+            setError('Please fill in all fields.');
+            return;
+        }
+
+        if (cleanUsername.length < 3) {
+            setError('Username must be at least 3 characters.');
+            return;
+        }
+
+        if (password.length < 6) {
+            setError('Password must be at least 6 characters.');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            setError('Passwords do not match.');
             return;
         }
 
         setLoading(true);
         try {
-            const response = await fetch('/api/auth/login', {
+            const response = await fetch('/api/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ username: cleanUsername, password })
             });
 
             const data = await response.json();
-            if (response.ok && data.success) {
-                onLoginSuccess(data.username);
-            } else {
-                setError(data.error || 'Authentication failed. Please try again.');
+
+            if (!response.ok) {
+                setError(data.error || 'Registration failed.');
+                return;
+            }
+
+            // Successfully registered, log in or notify success
+            if (onRegisterSuccess) {
+                onRegisterSuccess(cleanUsername);
             }
         } catch (err) {
             setError('Unable to connect to the authentication server.');
-            console.error('Login error:', err);
+            console.error('Registration error:', err);
         } finally {
             setLoading(false);
         }
@@ -58,14 +80,14 @@ export default function Login({ onLoginSuccess, onGoToRegister, hideSwitch }) {
 
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="username" className="form-label">Username</label>
+                        <label htmlFor="reg-username" className="form-label">Username</label>
                         <div className="search-input-wrapper" style={{ minWidth: '100%' }}>
                             <i className="fa-solid fa-user"></i>
                             <input
                                 type="text"
-                                id="username"
+                                id="reg-username"
                                 className="form-control"
-                                placeholder="Enter username"
+                                placeholder="Choose a username (min 3 chars)"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 required
@@ -75,15 +97,15 @@ export default function Login({ onLoginSuccess, onGoToRegister, hideSwitch }) {
                         </div>
                     </div>
 
-                    <div className="form-group" style={{ marginBottom: '2rem' }}>
-                        <label htmlFor="password" className="form-label">Password</label>
+                    <div className="form-group" style={{ marginTop: '1rem', marginBottom: '1rem' }}>
+                        <label htmlFor="reg-password" className="form-label">Password</label>
                         <div className="search-input-wrapper" style={{ minWidth: '100%' }}>
                             <i className="fa-solid fa-lock"></i>
                             <input
                                 type="password"
-                                id="password"
+                                id="reg-password"
                                 className="form-control"
-                                placeholder="Enter password"
+                                placeholder="Choose a password (min 6 chars)"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
@@ -92,26 +114,43 @@ export default function Login({ onLoginSuccess, onGoToRegister, hideSwitch }) {
                         </div>
                     </div>
 
+                    <div className="form-group" style={{ marginBottom: '2rem' }}>
+                        <label htmlFor="reg-confirm" className="form-label">Confirm Password</label>
+                        <div className="search-input-wrapper" style={{ minWidth: '100%' }}>
+                            <i className="fa-solid fa-lock"></i>
+                            <input
+                                type="password"
+                                id="reg-confirm"
+                                className="form-control"
+                                placeholder="Confirm your password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
+                                disabled={loading}
+                            />
+                        </div>
+                    </div>
+
                     <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={loading}>
                         {loading ? (
-                            <span><i className="fa-solid fa-spinner fa-spin"></i> Signing In...</span>
+                            <span><i className="fa-solid fa-spinner fa-spin"></i> Creating...</span>
                         ) : (
-                            <span><i className="fa-solid fa-right-to-bracket"></i> Sign In</span>
+                            <span><i className="fa-solid fa-user-plus"></i> Register</span>
                         )}
                     </button>
                 </form>
 
-                {!hideSwitch && (
+                {onGoToLogin && (
                     <div style={{ marginTop: '1.2rem', textAlign: 'center' }}>
                         <button
                             type="button"
-                            onClick={() => onGoToRegister && onGoToRegister()}
+                            onClick={onGoToLogin}
                             className="btn btn-link"
                             style={{ color: 'var(--color-accent)', textDecoration: 'none' }}
                             disabled={loading}
                         >
-                            <i className="fa-solid fa-user-plus" style={{ marginRight: '0.5rem' }} />
-                            Create an account
+                            <i className="fa-solid fa-right-to-bracket" style={{ marginRight: '0.5rem' }} />
+                            Back to Sign In
                         </button>
                     </div>
                 )}

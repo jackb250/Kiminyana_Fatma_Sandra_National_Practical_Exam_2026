@@ -4,6 +4,7 @@ const session = require('express-session');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const { pool } = require('./db');
+const { register } = require('./auth_routes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -75,6 +76,9 @@ app.post('/api/auth/logout', (req, res) => {
         res.json({ success: true, message: 'Logged out successfully.' });
     });
 });
+
+// POST /api/auth/register
+app.post('/api/auth/register', register);
 
 // GET /api/auth/me
 app.get('/api/auth/me', (req, res) => {

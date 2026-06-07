@@ -271,7 +271,7 @@ export default function Items() {
 
                         <form onSubmit={handleFormSubmit}>
                             <div className="form-group">
-                                <label htmlFor="itemname" class="form-label">Item Name *</label>
+                                <label htmlFor="itemname" className="form-label">Item Name *</label>
                                 <input
                                     type="text"
                                     id="itemname"
@@ -285,7 +285,7 @@ export default function Items() {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="specification" class="form-label">Specification / Details</label>
+                                <label htmlFor="specification" className="form-label">Specification / Details</label>
                                 <textarea
                                     id="specification"
                                     className="form-control"
@@ -298,7 +298,7 @@ export default function Items() {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="unitmeasure" class="form-label">Unit of Measure *</label>
+                                <label htmlFor="unitmeasure" className="form-label">Unit of Measure *</label>
                                 <input
                                     type="text"
                                     id="unitmeasure"
@@ -312,7 +312,7 @@ export default function Items() {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="quantity" class="form-label">Available Quantity *</label>
+                                <label htmlFor="quantity" className="form-label">Available Quantity *</label>
                                 <input
                                     type="number"
                                     id="quantity"
@@ -327,7 +327,7 @@ export default function Items() {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="unitprice" class="form-label">Unit Price (RWF) *</label>
+                                <label htmlFor="unitprice" className="form-label">Unit Price (RWF) *</label>
                                 <input
                                     type="number"
                                     id="unitprice"
@@ -343,7 +343,7 @@ export default function Items() {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="totalquantity" class="form-label">Total Cumulative Quantity</label>
+                                <label htmlFor="totalquantity" className="form-label">Total Cumulative Quantity</label>
                                 <input
                                     type="number"
                                     id="totalquantity"

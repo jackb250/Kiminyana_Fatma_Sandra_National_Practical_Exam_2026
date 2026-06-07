@@ -129,7 +129,7 @@ export default function Reports() {
             <div className="panel">
                 <div className="panel-header" style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '1rem', marginBottom: '1.5rem' }}>
                     <div>
-                        <h2 class="panel-title">DAB Enterprise LTD - Sales Activity Report</h2>
+                        <h2 className="panel-title">DAB Enterprise LTD - Sales Activity Report</h2>
                         <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
                             {startDate || endDate ? (
                                 <span>Date Range: {startDate || 'Beginning'} to {endDate || 'Present'}</span>

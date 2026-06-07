@@ -1,7 +1,9 @@
 // src/App.jsx
 import React, { useState, useEffect } from 'react';
 import Login from './components/Login';
+import Registration from './components/Registration';
 import Dashboard from './components/Dashboard';
+
 import Items from './components/Items';
 import Sales from './components/Sales';
 import Reports from './components/Reports';
@@ -9,6 +11,7 @@ import './App.css';
 
 export default function App() {
     const [currentUser, setCurrentUser] = useState(null);
+    const [authMode, setAuthMode] = useState('login');
     const [authLoading, setAuthLoading] = useState(true);
     const [tab, setTab] = useState('dashboard');
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -87,7 +90,23 @@ export default function App() {
     }
 
     if (!currentUser) {
-        return <Login onLoginSuccess={(username) => setCurrentUser(username)} />;
+        if (authMode === 'register') {
+            return (
+                <Registration
+                    onRegisterSuccess={(username) => {
+                        setCurrentUser(username);
+                    }}
+                    onGoToLogin={() => setAuthMode('login')}
+                />
+            );
+        }
+
+        return (
+            <Login
+                onLoginSuccess={(username) => setCurrentUser(username)}
+                onGoToRegister={() => setAuthMode('register')}
+            />
+        );
     }
 
     // Tab details for labels
